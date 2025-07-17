@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trang chủ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="m-0 h-screen font-sans flex">
+    lỏ rồi nha
+    <!-- <div class="flex items-center space-x-2">
+      <input
+        id="searchInput"
+        type="text"
+        class="w-72 px-3 py-1.5 border border-gray-300"
+      />
+      <button
+        id="btnSearch"
+        class="px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+      >
+        Tìm Kiếm
+      </button>
+    </div>
+    {% for email in emails %}
+    <a
+      href="{% url 'core:detail_email' email.id %}"
+      class="flex flex-column flex-1"
+    >
+      <h1 class="title">{{ email.title }}</h1>
+      <h1 class="time">{{ email.time }}</h1>
+      <h1 class="status">{{ email.status }}</h1>
+      <h1 class="status">
+        {% if email.status == True %}
+        <h1 class="status">Đã Đọc</h1>
+        {% else %}
+        <h1 class="status">chưa đọc</h1>
+        {% endif %}
+      </h1>
+    </a>
+    <form method="post" action="{% url 'core:delete_email' email.id %}">
+      {% csrf_token %}
+      <button
+        onclick="return cofirm('Do you want remove email')"
+        type="submit"
+        class="text-red-600 border border-red-600 px-3 py-1 rounded-md bover:bg-red-600 hover:text-while text-sm"
+      >Xóa</button>
+    </form>
+    {% endfor %} -->
+  </body>
+</html>
+<script>
+  document.getElementById("btnSearch").addEventListener("click", () => {
+    const query = document.getElementById("searchInput").value;
+    window.location.href = `/?q=${query}`;
+  });
+</script>
