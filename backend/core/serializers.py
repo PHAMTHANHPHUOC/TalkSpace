@@ -22,8 +22,3 @@ class KhachHangSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-
-# class serializers(serializers.ModelSerializer):
-#     class Meta(object):
-#         model = User
-#         fields = ['id','username','password','email']

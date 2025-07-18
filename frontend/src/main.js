@@ -6,7 +6,7 @@ import Blank from './layout/wrapper/index_blank.vue'
 const app = createApp(App)
 
 app.use(router)
-app.component("default-layout", Client);
+app.component("client-layout", Client);
 app.component("blank-layout", Blank);
 
 app.mount("#app")
