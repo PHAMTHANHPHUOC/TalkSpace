@@ -15,9 +15,11 @@ urlpatterns = [
     path('kich-hoat-tai-khoan/<str:hash_active>/', view_KhachHang.kich_hoat_tai_khoan, name='kich_hoat_tai_khoan'),
 
     path('ho-so-hoc-tap/create',view_HoSoHocTap.create_HoSo),
+    path('ho-so-hoc-tap/delete/<int:id>/',view_HoSoHocTap.delete_HoSo),
     path('ho-so-hoc-tap/data',view_HoSoHocTap.data_HoSo),
     path('cap-do/data',view_HoSoHocTap.data_CapDo),
     path('ngon-ngu/data',view_HoSoHocTap.data_NgonNgu),
+  
 
 ]
 

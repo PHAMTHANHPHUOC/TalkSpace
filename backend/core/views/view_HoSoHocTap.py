@@ -28,19 +28,16 @@ def create_HoSo(request):
             ngon_ngu = NgonNgu.objects.get(id=ngon_ngu_id) if ngon_ngu_id else None
             trinh_do = CapDo.objects.get(id=trinh_do_id) if trinh_do_id else None
 
-            hoso, created = HoSoHocTap.objects.get_or_create(
+            # Tạo hồ sơ mới trực tiếp
+            hoso = HoSoHocTap.objects.create(
                 khach_hang=khach_hang,
-                defaults={
-                    'ho_ten': ho_ten,
-                    'ngay_sinh': ngay_sinh,
-                    'gioi_tinh': gioi_tinh,
-                    'ngon_ngu_hoc': ngon_ngu,
-                    'trinh_do': trinh_do,
-                }
+                ho_ten=ho_ten,
+                ngay_sinh=ngay_sinh,
+                gioi_tinh=gioi_tinh,
+                ngon_ngu_hoc=ngon_ngu,
+                trinh_do=trinh_do,
             )
-            if not created:
-                return JsonResponse({'success': False, 'message': 'Hồ sơ đã tồn tại cho khách hàng này.'}, status=400)
-            return JsonResponse({'success': True, 'id': hoso.id})
+            return JsonResponse({'success': True, 'message': 'Tạo hồ sơ học tập thành công.', 'id': hoso.id})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
@@ -63,3 +60,25 @@ def data_CapDo(request):
 def data_NgonNgu(request):
     data = list(NgonNgu.objects.all().values('id', 'ten_ngon_ngu', 'ma_ngon_ngu'))
     return JsonResponse({'data': data})
+
+@csrf_exempt
+@api_view(['DELETE'])
+@login_required
+def delete_HoSo(request, id):
+    try:
+        if not request.user.is_authenticated:
+            return JsonResponse({'success': False, 'message': 'Bạn chưa đăng nhập.'}, status=401)
+        
+        # Lấy hồ sơ học tập theo ID và khách hàng hiện tại
+        hoso = HoSoHocTap.objects.filter(id=id, khach_hang=request.user).first()
+        
+        if not hoso:
+            return JsonResponse({'success': False, 'message': 'Không tìm thấy hồ sơ học tập hoặc bạn không có quyền xóa.'}, status=404)
+        
+        # Xóa hồ sơ
+        hoso.delete()
+        
+        return JsonResponse({'success': True, 'message': 'Xóa hồ sơ học tập thành công.'})
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': f'Có lỗi xảy ra: {str(e)}'}, status=500)

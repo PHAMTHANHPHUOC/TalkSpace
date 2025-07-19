@@ -29,7 +29,7 @@
         </div>
         <button type="button" class="btn-auth" @click="actionDangKy()">Đăng Ký</button>
         <div class="auth-link">
-          Đã có tài khoản? <router-link to="/khach-hang/dang-nhap">Đăng Nhập</router-link>
+          Đã có tài khoản? <router-link to="/dang-nhap">Đăng Nhập</router-link>
         </div>
       </form>
     </div>

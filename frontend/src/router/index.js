@@ -7,15 +7,20 @@ const routes = [
         beforeEnter: KiemTraKhachHang,
     },
     {
-        path: '/khach-hang/dang-ky', component: () => import('../components/NguoiDung/DangKy/index.vue'),
+        path: '/dang-ky', component: () => import('../components/NguoiDung/DangKy/index.vue'),
         
     },
     {
-        path: '/khach-hang/dang-nhap', component: () => import('../components/NguoiDung/DangNhap/index.vue'),
+        path: '/dang-nhap', component: () => import('../components/NguoiDung/DangNhap/index.vue'),
         
     },
+        {
+        path: '/learning', component: () => import('../components/NguoiDung/HocTap/index.vue'),
+        meta : {layout : 'client'},
+        beforeEnter: KiemTraKhachHang,
+    },
     {
-        path: '/khach-hang/kich-hoat-tai-khoan/:id_can_kich_hoat', component: () => import('../components/NguoiDung/KichHoatTaiKhoan/index.vue'),
+        path: '/kich-hoat-tai-khoan/:id_can_kich_hoat', component: () => import('../components/NguoiDung/KichHoatTaiKhoan/index.vue'),
         
     },
 ]

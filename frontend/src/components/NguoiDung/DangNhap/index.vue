@@ -17,7 +17,7 @@
         </div>
         <button type="button" class="btn-auth" @click="actionDangNhap()">Đăng Nhập</button>
         <div class="auth-link">
-          Chưa có tài khoản? <router-link to="/khach-hang/dang-ky">Đăng Ký</router-link>
+          Chưa có tài khoản? <router-link to="/dang-ky">Đăng Ký</router-link>
         </div>
       </form>
     </div>
