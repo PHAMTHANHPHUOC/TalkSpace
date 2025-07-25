@@ -183,4 +183,5 @@ export default {
   text-decoration: underline;
   margin-left: 4px;
 }
+
 </style>

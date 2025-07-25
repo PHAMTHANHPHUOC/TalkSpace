@@ -15,7 +15,7 @@
     <!-- Main content -->
     <div class="main-content">
       <!-- Dòng chữ trên đầu -->
-      <div class="ai-header">AI SỊN</div>
+      <!-- <div class="ai-header"><img style="height: 50px;width: 50px;" src="/src/assets/images/iconnew.png" alt=""></div> -->
       <div class="ai-center-area">
         <!-- Avatar AI -->
         <div class="ai-avatar">
@@ -33,8 +33,40 @@
       </div>
       <!-- Thanh chức năng dưới cùng -->
       <div class="bottom-bar">
-        <div class="bar-item" v-for="(item, idx) in bottomBar" :key="idx">
-          <i :class="item.icon"></i>
+        <div class="bar-item" >
+          <!-- Icon microphone -->
+          <i v-if="onmic==1" class="bx bx-microphone"></i>
+          <!-- Icon microphone off -->
+          <i v-else  class="bx bx-microphone-off"></i>
+          <!-- Icon pause -->
+          <i v-if="stop==0"  class="bx bx-pause"></i>
+          <i v-else class="bx bx-play"></i>
+
+          <!-- Icon volume full -->
+          <i v-if="volum==1" class="bx bx-volume-full"></i>
+          <i v-else class="bx bx-volume-mute"></i>
+
+          <!-- Icon send -->
+          <!-- <i class="bx bx-send"></i> -->
+
+          <!-- Icon settings/cog -->
+          <i class="bx bx-cog"></i>
+
+          <!-- Icon user -->
+          <i class="bx bx-user"></i>
+
+          <!-- Icon book open -->
+          <i class="bx bx-book-open"></i>
+
+          <!-- Icon trophy -->
+          <i class="bx bx-trophy"></i>
+
+          <!-- Icon message -->
+          <i class="bx bx-message"></i>
+
+          <!-- Icon dots horizontal rounded -->
+          <i class="bx bx-dots-horizontal-rounded"></i>
+
         </div>
         <div class="bar-item more">...</div>
       </div>
@@ -47,22 +79,14 @@ export default {
   name: 'LuyenNoiUI',
   data() {
     return {
+      onmic: 0,
+      stop: 1,
+      volum:0,
       sidebarCollapsed: false,
       messages: [
         { type: 'ai', text: 'Xin chào! Tôi là trợ lý AI.' },
         { type: 'user', text: 'Chào bạn!' }
       ],
-      bottomBar: [
-        { icon: 'bx bx-microphone' },
-        { icon: 'bx bx-volume-full' },
-        { icon: 'bx bx-send' },
-        { icon: 'bx bx-cog' },
-        { icon: 'bx bx-user' },
-        { icon: 'bx bx-book-open' },
-        { icon: 'bx bx-trophy' },
-        { icon: 'bx bx-message' },
-        { icon: 'bx bx-dots-horizontal-rounded' }
-      ]
     }
   },
   methods: {
@@ -74,6 +98,32 @@ export default {
 </script>
 
 <style scoped>
+.bar-item {
+  display: flex;
+  flex-direction: row; /* Có thể đổi thành column nếu muốn hiển thị dọc */
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff; /* hoặc #f9f9f9 */
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  gap: 15px; /* khoảng cách giữa các icon */
+}
+
+.bar-item i {
+  font-size: 24px;
+  color: #555;
+  padding: 10px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.bar-item i:hover {
+  background-color: #e0e0e0;
+  color: #000;
+  transform: scale(0.9);
+}
 .ai-layout {
   display: flex;
   height: 768px;
