@@ -425,7 +425,7 @@ export default {
                     if (res.data.status) {
                         toaster.success(res.data.message);
                         localStorage.setItem("chia_khoa", "");
-                        this.$router.push("/khach-hang/dang-nhap");
+                        this.$router.push("dang-nhap");
                     } else {
                         toaster.error(res.data.message);
                     }
@@ -443,7 +443,7 @@ export default {
                     if (res.data.status) {
                         toaster.success(res.data.message);
                         localStorage.setItem("chia_khoa", "");
-                        this.$router.push("/khach-hang/dang-nhap");
+                        this.$router.push("dang-nhap");
                     } else {
                         toaster.error(res.data.message);
                     }

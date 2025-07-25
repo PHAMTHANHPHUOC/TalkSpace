@@ -1,103 +1,42 @@
 <template>
-  <div class="luyen-noi-container">
-    <!-- Sidebar có thể thu gọn -->
-    <div class="sidebar" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
-      <div class="sidebar-header">
-        <h3>Chức năng khác</h3>
-        <button @click="toggleSidebar" class="toggle-btn">
-          <i class="bx" :class="sidebarCollapsed ? 'bx-menu' : 'bx-x'"></i>
-        </button>
+  <div class="ai-layout">
+    <!-- Sidebar trái -->
+    <div class="sidebar" :class="{ collapsed: sidebarCollapsed }">
+      <div class="sidebar-toggle" @click="toggleSidebar">
+        <i class="bx" :class="sidebarCollapsed ? 'bx-chevron-right' : 'bx-chevron-left'"></i>
       </div>
-      <div class="sidebar-content" v-if="!sidebarCollapsed">
-        <p class="sidebar-description">
-          Thanh chọn các chức năng khác, chưa update, có thể click cho nó thu gọn và mở rộng ra
-        </p>
-        <div class="menu-items">
-          <div class="menu-item">
-            <i class="bx bx-book-open"></i>
-            <span>Bài học</span>
-          </div>
-          <div class="menu-item">
-            <i class="bx bx-trophy"></i>
-            <span>Thành tích</span>
-          </div>
-          <div class="menu-item">
-            <i class="bx bx-cog"></i>
-            <span>Cài đặt</span>
-          </div>
+      <transition name="fade">
+        <div v-if="!sidebarCollapsed" class="sidebar-content">
+          <div class="sidebar-title">chưa có chức năng nào,...</div>
         </div>
-      </div>
+      </transition>
     </div>
 
-    <!-- Khu vực chat chính -->
-    <div class="chat-main">
-  
-
-      <!-- Khu vực hiển thị tin nhắn -->
-      <div class="chat-messages" ref="messagesContainer">
-        <div 
-          v-for="(message, index) in messages" 
-          :key="index"
-          class="message"
-          :class="message.type"
-        >
-          <div class="message-avatar">
-            <div class="avatar" :class="message.type">
-              <i class="bx" :class="message.type === 'user' ? 'bx-user' : 'bx-bot'"></i>
-            </div>
-          </div>
-          <div class="message-content">
-            <div class="message-bubble">
-              {{ message.text }}
-            </div>
-            <div class="message-time">{{ message.time }}</div>
-          </div>
+    <!-- Main content -->
+    <div class="main-content">
+      <!-- Dòng chữ trên đầu -->
+      <div class="ai-header">AI SỊN</div>
+      <div class="ai-center-area">
+        <!-- Avatar AI -->
+        <div class="ai-avatar">
+          <img src="../../../assets/images/AI.jpg" alt="">
         </div>
-
-        <!-- Tin nhắn đang ghi âm -->
-        <div v-if="isRecording && currentSpeechText" class="message user">
-          <div class="message-avatar">
-            <div class="avatar user">
-              <i class="bx bx-user"></i>
-            </div>
-          </div>
-          <div class="message-content">
-            <div class="message-bubble recording">
-              <div class="recording-indicator">
-                <span class="pulse"></span>
-                <span class="pulse"></span>
-                <span class="pulse"></span>
-              </div>
-              {{ currentSpeechText }}
+        <!-- Khung message nổi -->
+        <div class="message-box">
+          <div class="message-title">giống message</div>
+          <div class="messages">
+            <div v-for="(message, idx) in messages" :key="idx" class="msg-item" :class="message.type">
+              <span>{{ message.text }}</span>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Khu vực điều khiển -->
-      <div class="chat-controls">
-        <div class="control-buttons">
-          <button 
-            @click="toggleRecording" 
-            class="record-btn"
-            :class="{ 'recording': isRecording }"
-          >
-            <i class="bx" :class="isRecording ? 'bx-stop' : 'bx-microphone'"></i>
-            {{ isRecording ? 'Dừng' : 'Bắt đầu nói' }}
-          </button>
+      <!-- Thanh chức năng dưới cùng -->
+      <div class="bottom-bar">
+        <div class="bar-item" v-for="(item, idx) in bottomBar" :key="idx">
+          <i :class="item.icon"></i>
         </div>
-        
-        <div class="input-area">
-          <input 
-            v-model="textInput" 
-            @keyup.enter="sendTextMessage"
-            placeholder="Hoặc nhập tin nhắn..."
-            class="text-input"
-          />
-          <button @click="sendTextMessage" class="send-btn">
-            <i class="bx bx-send"></i>
-          </button>
-        </div>
+        <div class="bar-item more">...</div>
       </div>
     </div>
   </div>
@@ -105,456 +44,215 @@
 
 <script>
 export default {
-  name: 'LuyenNoi',
+  name: 'LuyenNoiUI',
   data() {
     return {
       sidebarCollapsed: false,
-      isRecording: false,
       messages: [
-        {
-          type: 'ai',
-          text: 'Xin chào! Tôi là trợ lý AI. Hãy bắt đầu luyện nói tiếng Anh với tôi nhé!',
-          time: this.getCurrentTime()
-        }
+        { type: 'ai', text: 'Xin chào! Tôi là trợ lý AI.' },
+        { type: 'user', text: 'Chào bạn!' }
       ],
-      currentSpeechText: '',
-      textInput: ''
+      bottomBar: [
+        { icon: 'bx bx-microphone' },
+        { icon: 'bx bx-volume-full' },
+        { icon: 'bx bx-send' },
+        { icon: 'bx bx-cog' },
+        { icon: 'bx bx-user' },
+        { icon: 'bx bx-book-open' },
+        { icon: 'bx bx-trophy' },
+        { icon: 'bx bx-message' },
+        { icon: 'bx bx-dots-horizontal-rounded' }
+      ]
     }
   },
   methods: {
     toggleSidebar() {
       this.sidebarCollapsed = !this.sidebarCollapsed;
-    },
-    toggleRecording() {
-      this.isRecording = !this.isRecording;
-      if (this.isRecording) {
-        this.startRecording();
-      } else {
-        this.stopRecording();
-      }
-    },
-    startRecording() {
-      // Giả lập việc ghi âm
-      this.currentSpeechText = 'Đang nghe...';
-      // Ở đây sẽ tích hợp với Web Speech API
-      console.log('Bắt đầu ghi âm');
-    },
-    stopRecording() {
-      if (this.currentSpeechText && this.currentSpeechText !== 'Đang nghe...') {
-        this.messages.push({
-          type: 'user',
-          text: this.currentSpeechText,
-          time: this.getCurrentTime()
-        });
-        
-        // Giả lập phản hồi AI
-        setTimeout(() => {
-          this.messages.push({
-            type: 'ai',
-            text: 'Tôi đã hiểu bạn nói: "' + this.currentSpeechText + '". Hãy tiếp tục luyện tập nhé!',
-            time: this.getCurrentTime()
-          });
-          this.scrollToBottom();
-        }, 1000);
-      }
-      
-      this.currentSpeechText = '';
-      console.log('Dừng ghi âm');
-    },
-    sendTextMessage() {
-      if (this.textInput.trim()) {
-        this.messages.push({
-          type: 'user',
-          text: this.textInput,
-          time: this.getCurrentTime()
-        });
-        
-        // Giả lập phản hồi AI
-        setTimeout(() => {
-          this.messages.push({
-            type: 'ai',
-            text: 'Bạn đã nhập: "' + this.textInput + '". Tôi sẽ giúp bạn luyện nói!',
-            time: this.getCurrentTime()
-          });
-          this.scrollToBottom();
-        }, 1000);
-        
-        this.textInput = '';
-        this.scrollToBottom();
-      }
-    },
-    getCurrentTime() {
-      const now = new Date();
-      return now.getHours().toString().padStart(2, '0') + ':' + 
-             now.getMinutes().toString().padStart(2, '0');
-    },
-    scrollToBottom() {
-      this.$nextTick(() => {
-        if (this.$refs.messagesContainer) {
-          this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
-        }
-      });
     }
-  },
-  mounted() {
-    this.scrollToBottom();
   }
 }
 </script>
 
 <style scoped>
-.luyen-noi-container {
+.ai-layout {
   display: flex;
-  height: 100vh;
-  background: #f5f5f5;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 768px;
+  width: 1700px;
+  background: #f7fafd;
+  overflow: hidden;
 }
 
-/* Sidebar */
 .sidebar {
-  width: 280px;
-  background: #2c3e50;
-  color: white;
-  transition: all 0.3s ease;
+  width: 180px;
+  height: 766px;
+  min-width: 60px;
+  background: #222c36;
+  color: #fff;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  transition: width 0.3s cubic-bezier(.4,2,.6,1);
+  position: relative;
+  box-shadow: 2px 0 8px #0001;
+  z-index: 2;
 }
-
-.sidebar-collapsed {
+.sidebar.collapsed {
   width: 60px;
 }
-
-.sidebar-header {
-  padding: 20px;
-  border-bottom: 1px solid #34495e;
+.sidebar-toggle {
+  height: 48px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-}
-
-.sidebar-header h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.toggle-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
+  justify-content: flex-end;
+  padding: 0 ;
   cursor: pointer;
-  padding: 5px;
-  border-radius: 5px;
-  transition: background 0.2s;
+  font-size: 24px;
+  background: #1a222b;
+  border-bottom: 1px solid #2d3742;
 }
-
-.toggle-btn:hover {
-  background: #34495e;
-}
-
 .sidebar-content {
-  padding: 20px;
-  flex: 1;
-}
-
-.sidebar-description {
-  font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 30px;
-  color: #bdc3c7;
-}
-
-.menu-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.menu-item:hover {
-  background: #34495e;
-}
-
-.menu-item i {
-  font-size: 20px;
-}
-
-/* Chat Main */
-.chat-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: white;
-}
-
-.chat-header {
-  padding: 20px 30px;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-}
-
-.chat-header h2 {
-  margin: 0;
-  color: #2c3e50;
-  font-weight: 600;
-}
-
-.status-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #7f8c8d;
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #27ae60;
-  transition: all 0.3s;
-}
-
-.status-dot.recording {
-  background: #e74c3c;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-
-/* Messages */
-.chat-messages {
-  flex: 1;
-  padding: 20px 30px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.message {
-  display: flex;
-  gap: 12px;
-  max-width: 80%;
-}
-
-.message.user {
-  align-self: flex-end;
-  flex-direction: row-reverse;
-}
-
-.message.ai {
-  align-self: flex-start;
-}
-
-.message-avatar {
-  flex-shrink: 0;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: white;
-}
-
-.avatar.user {
-  background: #3498db;
-}
-
-.avatar.ai {
-  background: #2ecc71;
-}
-
-.message-content {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.message-bubble {
-  padding: 12px 16px;
-  border-radius: 18px;
-  max-width: 100%;
-  word-wrap: break-word;
-  line-height: 1.4;
-}
-
-.message.user .message-bubble {
-  background: #3498db;
-  color: white;
-  border-bottom-right-radius: 5px;
-}
-
-.message.ai .message-bubble {
-  background: #ecf0f1;
-  color: #2c3e50;
-  border-bottom-left-radius: 5px;
-}
-
-.message-bubble.recording {
-  background: #f39c12;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.recording-indicator {
-  display: flex;
-  gap: 3px;
-}
-
-.pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: white;
-  animation: pulse 1s infinite;
-}
-
-.pulse:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.pulse:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-.message-time {
-  font-size: 12px;
-  color: #95a5a6;
-  align-self: flex-end;
-}
-
-.message.user .message-time {
-  align-self: flex-start;
-}
-
-/* Controls */
-.chat-controls {
-  padding: 20px 30px;
-  border-top: 1px solid #e0e0e0;
-  background: white;
-}
-
-.control-buttons {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-.record-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
+  padding: 24px 16px;
   font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  background: #3498db;
-  color: white;
+  line-height: 1.6;
+  color: #cfd8dc;
+}
+.sidebar-title {
+  font-weight: 500;
+  font-size: 15px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
-.record-btn:hover {
-  background: #2980b9;
-  transform: translateY(-2px);
-}
-
-.record-btn.recording {
-  background: #e74c3c;
-  animation: pulse 2s infinite;
-}
-
-.record-btn.recording:hover {
-  background: #c0392b;
-}
-
-.input-area {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.text-input {
+.main-content {
   flex: 1;
-  padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 25px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.3s;
-}
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
 
-.text-input:focus {
-  border-color: #3498db;
-}
+height: 80vh;
 
-.send-btn {
-  width: 45px;
-  height: 45px;
-  border: none;
-  border-radius: 50%;
-  background: #3498db;
-  color: white;
-  cursor: pointer;
+}
+.ai-header {
+  text-align: center;
+  font-size: 16px;
+  color: #222;
+  margin-top: 18px;
+  margin-bottom: 0;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+.ai-center-area {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  transition: all 0.3s;
+  position: relative;
+  min-height: 0;
+
+}
+.ai-avatar {
+  z-index: 1;
+  margin-right: 120px;
+  margin-left: 40px;
+}
+.message-box {
+  position: absolute;
+  right: 16px;
+  bottom: 24px;
+  top: auto;
+  transform: none;
+  width: 340px;
+  min-height: 120px;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 4px 32px #0002;
+  padding: 24px 20px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  border: 1.5px solid #e3e8ee;
+}
+.message-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: #2d3742;
+  margin-bottom: 10px;
+}
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.msg-item {
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: #f2f6fa;
+  color: #222;
+  align-self: flex-start;
+  max-width: 90%;
+}
+.msg-item.user {
+  background: #3498db;
+  color: #fff;
+  align-self: flex-end;
 }
 
-.send-btn:hover {
-  background: #2980b9;
-  transform: scale(1.1);
+.bottom-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: #f7fafd;
+  border-top: 1.5px solid #e3e8ee;
+}
+.bar-item {
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #222c36;
+  box-shadow: 0 2px 8px #0001;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.bar-item:hover {
+  background: #e3e8ee;
+  box-shadow: 0 4px 16px #0002;
+}
+.bar-item.more {
+  font-size: 26px;
+  color: #b0b8c1;
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    z-index: 1000;
-    transform: translateX(-100%);
-  }
-  
-  .sidebar:not(.sidebar-collapsed) {
-    transform: translateX(0);
-  }
-  
-  .chat-main {
-    margin-left: 0;
-  }
-  
-  .message {
-    max-width: 90%;
-  }
+@media (max-width: 900px) {
+  .ai-avatar { margin-right: 30px; margin-left: 10px; }
+  .message-box { right: 2vw; width: 90vw; min-width: 0; }
+}
+@media (max-width: 600px) {
+  .sidebar { display: none; }
+  .main-content { padding: 0; }
+  .ai-header { font-size: 14px; }
+  .ai-avatar { margin: 0; }
+  .message-box { right: 0; left: 0; margin: auto; width: 98vw; }
+  .bottom-bar { gap: 6px; padding: 10px 0; }
+  .bar-item { width: 36px; height: 36px; font-size: 18px; }
 }
 </style>
