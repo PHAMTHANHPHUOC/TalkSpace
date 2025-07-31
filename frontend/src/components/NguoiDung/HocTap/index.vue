@@ -313,9 +313,24 @@ export default {
             .then((res) => {
                 console.log('Ho so data response:', res.data);
                 this.hosoList = res.data.data || [];
-                // Tự động chọn hồ sơ đầu tiên nếu có
+                
+                // Đọc ID hồ sơ được chọn từ localStorage
+                const selectedHosoIdFromStorage = localStorage.getItem('selectedHosoId');
+                
                 if (this.hosoList.length > 0) {
-                    this.selectedHosoId = this.hosoList[0].id;
+                    if (selectedHosoIdFromStorage) {
+                        // Kiểm tra xem ID từ localStorage có tồn tại trong danh sách không
+                        const hosoExists = this.hosoList.find(hoso => hoso.id == selectedHosoIdFromStorage);
+                        if (hosoExists) {
+                            this.selectedHosoId = parseInt(selectedHosoIdFromStorage);
+                        } else {
+                            // Nếu không tồn tại, chọn hồ sơ đầu tiên
+                            this.selectedHosoId = this.hosoList[0].id;
+                        }
+                    } else {
+                        // Nếu không có ID trong localStorage, chọn hồ sơ đầu tiên
+                        this.selectedHosoId = this.hosoList[0].id;
+                    }
                     this.getUserLanguage(); // Lấy ngôn ngữ sau khi có hồ sơ
                 }
             })

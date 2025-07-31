@@ -33,9 +33,9 @@
            
             
             <div class="mt-3">
-              <router-link to="/learning" class="btn btn-primary btn-sm w-100">
+              <button @click="startLearning(item.id)" class="btn btn-primary btn-sm w-100">
                 <i class="fa fa-graduation-cap"></i> Bắt đầu Học
-              </router-link>
+              </button>
             </div>
             
             <!-- Nút xóa hiện khi hover -->
@@ -329,6 +329,13 @@ export default {
         .finally(() => {
             this.loadingDelete = false;
         });
+    },
+
+    startLearning(hosoId) {
+        // Lưu ID hồ sơ được chọn vào localStorage
+        localStorage.setItem('selectedHosoId', hosoId);
+        // Chuyển đến trang học tập
+        this.$router.push('/learning');
     },
 
   },
