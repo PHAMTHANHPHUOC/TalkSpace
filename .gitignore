@@ -1,0 +1,19 @@
+node_modules
+node_modules
+.venv/
+.env
+__pycache__/
+*.pyc
+*.pkl
+*.h5
+*.pt
+
+# Node.js
+node_modules/
+dist/
+build/
+
+# Media
+*.mp4
+*.avi
+*.zip
