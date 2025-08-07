@@ -19,6 +19,12 @@ const routes = [
         
     },
     {
+        path: '/profile', component: () => import('../components/NguoiDung/Profile/index.vue'),
+        meta : {layout : 'client'},
+        beforeEnter: KiemTraKhachHang,
+        
+    },
+    {
         path: '/lay-lai-mat-khau/:hash_reset', component: () => import('../components/NguoiDung/ResetMatKhau/index.vue'),
         
     },

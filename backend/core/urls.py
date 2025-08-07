@@ -15,6 +15,7 @@ urlpatterns = [
     path('logout/',view_KhachHang.logout),
     path('logout-all/',view_KhachHang.logout_all),
     path('kich-hoat-tai-khoan/<str:hash_active>/', view_KhachHang.kich_hoat_tai_khoan, name='kich_hoat_tai_khoan'),
+    path('thong-tin/', view_KhachHang.thong_tin),
 
     path('ho-so-hoc-tap/create',view_HoSoHocTap.create_HoSo),
     path('ho-so-hoc-tap/delete/<int:id>/',view_HoSoHocTap.delete_HoSo),
@@ -24,15 +25,7 @@ urlpatterns = [
     path('cap-do/data',view_HoSoHocTap.data_CapDo),
     path('ngon-ngu/data',view_HoSoHocTap.data_NgonNgu),
     path('chu-de/data',view_HoSoHocTap.data_ChuDe),
-    
-    # Voice Chat API endpoints
-    #chuyển giọng nói thành văn bản
-    path('voice-chat/record-transcribe/', view_VoiceChatAPI.record_and_transcribe, name='record_and_transcribe'),
-    #chuyển đổi âm thanh được truyền vào thành văn bản text
-    path('voice-chat/transcribe-file/', view_VoiceChatAPI.transcribe_audio_file, name='transcribe_audio_file'),
-    #chuyển âm thanh từ dạng base64 sang text
-    path('voice-chat/transcribe-base64/', view_VoiceChatAPI.transcribe_base64_audio, name='transcribe_base64_audio'),
-    
+
     # GPT API endpoints
     #chát với chatGPT bằng text
     path('gpt/chat/', view_GPTAPI.chat_with_gpt, name='chat_with_gpt'),

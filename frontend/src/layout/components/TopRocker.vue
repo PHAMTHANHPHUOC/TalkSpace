@@ -381,8 +381,10 @@
                         <img src="../../assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="javascript:;"><i
-                                    class="bx bx-user"></i><span>Profile</span></a>
+                        <li>
+                        <router-link class="dropdown-item" to="/profile">
+                            <i class="bx bx-user"></i><span>Profile</span>
+                        </router-link>
                         </li>
                         <li>
                             <div class="dropdown-divider mb-0"></div>

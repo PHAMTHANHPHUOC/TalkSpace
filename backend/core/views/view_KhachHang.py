@@ -18,13 +18,15 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from django.conf import settings
 import uuid
+from core.serializers import KhachHangSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-
+import logging
+logger = logging.getLogger(__name__)
 # Custom exception handler để trả về thông báo tuỳ chỉnh khi chưa đăng nhập
 # Để sử dụng, thêm vào settings.py:
 # REST_FRAMEWORK = {
@@ -34,7 +36,33 @@ from django.template.loader import render_to_string
 #     'EXCEPTION_HANDLER': 'core.views.custom_exception_handler',
 # }
 
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def thong_tin(request):
+    """
+    Alternative: Trả về thông tin User thay vì KhachHang
+    """
+    try:
+        user = request.user
+        
+        if not user or user.is_anonymous:
+            return Response({
+                'status': False,
+                'message': "User chưa được xác thực"
+            }, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # Sử dụng UserSerializer cho Django User
+        serializer = UserSerializer(user)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        })
+        
+    except Exception as e:
+        return Response({
+            'status': False,
+            'message': f"Đã có lỗi xảy ra: {str(e)}"
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 def home(request):
     return render(request,'core/home.html')
 
