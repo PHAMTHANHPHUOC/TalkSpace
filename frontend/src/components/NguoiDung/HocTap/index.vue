@@ -7,10 +7,10 @@
       </div>
       <transition name="fade">
         <div v-if="!sidebarCollapsed" class="sidebar-content">
-          <div class="sidebar-title">Voice Chat Settings</div>
+          <div class="sidebar-title">{{ $t('voiceChatSettings') }}</div>
           <div class="settings-section">
             <div class="setting-item">
-              <label>Recording Duration (s):</label>
+              <label>{{ $t('recordingDuration') }}</label>
               <input 
                 type="number" 
                 v-model="recordingDuration" 
@@ -21,7 +21,7 @@
               >
             </div>
             <div class="setting-item">
-              <label>Recognition Method:</label>
+              <label>{{ $t('recognitionMethod') }}</label>
               <div class="radio-group">
                 <label class="radio-label">
                   <input 
@@ -30,7 +30,7 @@
                     :value="true"
                     :disabled="isRecording"
                   >
-                  Whisper (More Accurate)
+                  {{ $t('whisper') }} ({{ $t('moreAccurate') }})
                 </label>
                 <label class="radio-label">
                   <input 
@@ -39,33 +39,30 @@
                     :value="false"
                     :disabled="isRecording"
                   >
-                  Google STT (Faster)
+                  {{ $t('googleSTT') }} ({{ $t('faster') }})
                 </label>
               </div>
             </div>
-             <div class="mb-3 setting-item ">
-            <label class="form-label">Chọn Chủ Đề</label>
-            <select v-model="form.chu_de" class="form-select" required>
-              <option value="" disabled>Chọn Chủ Đề</option>
-              <option v-for="item in chude" :key="item.id" :value="item.id">{{ item.ten_chu_de }}</option>
-            </select>
-          </div>
-           <div class="mb-3 setting-item ">
-            <label class="form-label">Cấp Độ</label>
-            <select v-model="form.trinh_do" class="form-select" required>
-              <option value="" disabled>Chọn Cấp Độ</option>
-              <option v-for="item in capdo" :key="item.id" :value="item.id">{{ item.ten_cap_do }}</option>
-            </select>
-          </div>
-       
+            <div class="mb-3 setting-item ">
+              <label class="form-label">{{ $t('chooseTopic') }}</label>
+              <select v-model="form.chu_de" class="form-select" required>
+                <option value="" disabled>{{ $t('chooseTopic') }}</option>
+                <option v-for="item in chude" :key="item.id" :value="item.id">{{ item.ten_chu_de }}</option>
+              </select>
+            </div>
+            <div class="mb-3 setting-item ">
+              <label class="form-label">{{ $t('chooseLevel') }}</label>
+              <select v-model="form.trinh_do" class="form-select" required>
+                <option value="" disabled>{{ $t('chooseLevel') }}</option>
+                <option v-for="item in capdo" :key="item.id" :value="item.id">{{ item.ten_cap_do }}</option>
+              </select>
+            </div>
             <div class="setting-item">
               <button @click="getLearningSuggestions" class="suggestions-button">
                 <i class="bx bx-lightbulb"></i>
-                Lấy gợi ý học tập
+                {{ $t('getSuggestions') }}
               </button>
             </div>
-            
-
           </div>
         </div>
       </transition>
@@ -73,8 +70,6 @@
 
     <!-- Main content -->
     <div class="main-content">
-      <!-- Dòng chữ trên đầu -->
-      <!-- <div class="ai-header"><img style="height: 50px;width: 50px;" src="/src/assets/images/iconnew.png" alt=""></div> -->
       <div class="ai-center-area">
         <!-- Avatar AI -->
         <div class="ai-avatar">
@@ -87,23 +82,23 @@
             <div class="start-icon">
               <i class="bx bx-play-circle"></i>
             </div>
-            <h3 class="start-title">Bắt đầu phiên học tập</h3>
+            <h3 class="start-title">{{ $t('startSessionTitle') }}</h3>
             <p class="start-description">
-              Nhấn Start để bắt đầu trò chuyện với AI và luyện tập kỹ năng nói
+              {{ $t('startSessionDesc') }}
             </p>
             <button @click="startSession" class="start-button">
               <i class="bx bx-play me-2"></i>
-              Start Learning Session
+              {{ $t('startSessionBtn') }}
             </button>
           </div>
         </div>
 
         <!-- Khung message nổi -->
         <div v-if="sessionStarted" class="message-box">
-          <div class="message-title">Conversation</div>
+          <div class="message-title">{{ $t('conversation') }}</div>
           <div class="messages">
             <div v-for="(message, idx) in messages" :key="idx" class="msg-item" :class="message.type">
-              <span>{{ message.text }}</span>
+              <span>{{ $t(message.text) }}</span>
             </div>
             <!-- Recording indicator -->
             <div v-if="isRecording" class="msg-item recording-indicator">
@@ -112,12 +107,12 @@
                 <span></span>
                 <span></span>
               </div>
-              <span>Recording... {{ recordingTime }}s</span>
+              <span>{{ $t('recording') }}... {{ recordingTime }}s</span>
             </div>
             <!-- Processing indicator -->
             <div v-if="isProcessing" class="msg-item processing-indicator">
               <div class="spinner"></div>
-              <span>Processing audio...</span>
+              <span>{{ $t('processingAudio') }}</span>
             </div>
           </div>
           
@@ -128,7 +123,7 @@
                 v-model="textInput"
                 @keyup.enter="sendTextMessage"
                 type="text" 
-                placeholder="Nhập tin nhắn hoặc nhấn Enter..."
+                :placeholder="$t('inputPlaceholder')"
                 class="text-input"
                 :disabled="isProcessing"
               >
@@ -146,14 +141,14 @@
                 :class="['tab-button', { active: inputMode === 'text' }]"
               >
                 <i class="bx bx-edit"></i>
-                Text
+                {{ $t('text') }}
               </button>
               <button 
                 @click="inputMode = 'voice'"
                 :class="['tab-button', { active: inputMode === 'voice' }]"
               >
                 <i class="bx bx-microphone"></i>
-                Voice
+                {{ $t('voice') }}
               </button>
             </div>
           </div>
@@ -196,27 +191,13 @@
           <i @click="togglevolum" v-if="volum==1" class="bx bx-volume-full"></i>
           <i @click="togglevolum" v-else class="bx bx-volume-mute"></i>
 
-          <!-- Icon send -->
-          <!-- <i class="bx bx-send"></i> -->
-
           <!-- Icon settings/cog -->
           <i class="bx bx-cog"></i>
-
-          <!-- Icon user -->
           <i class="bx bx-user"></i>
-
-          <!-- Icon book open -->
           <i class="bx bx-book-open"></i>
-
-          <!-- Icon trophy -->
           <i class="bx bx-trophy"></i>
-
-          <!-- Icon message -->
           <i class="bx bx-message"></i>
-
-          <!-- Icon dots horizontal rounded -->
           <i class="bx bx-dots-horizontal-rounded"></i>
-
         </div>
         <div class="bar-item more">...</div>
       </div>
@@ -227,29 +208,35 @@
 <script>
 import axios from 'axios';
 import baseRequest from '../../../../src/core/baseRequest';
+import { setLocale } from '../../../i18n/index';
 
 export default {
   name: 'LuyenNoiUI',
+    async mounted() {
+    await setLocale(gtts_code); // Đặt ở đây để đảm bảo đúng cú pháp
+    this.DataCapDo();
+    this.DataNgonNgu();
+    this.DataHoSo();
+  },
   data() {
     return {
       form: {
-      chu_de: '',
-      trinh_do: '',
-    },
+        chu_de: '',
+        trinh_do: '',
+      },
       onmic: 0,
       stop: 0,
       volum: 0,
       capdo: [],
       chude : [],
-      hosoList: [], // Danh sách hồ sơ học tập
-      selectedHosoId: null, // ID hồ sơ được chọn
+      hosoList: [],
+      selectedHosoId: null,
       sidebarCollapsed: false,
       sessionStarted: false,
       isRecording: false,
       isProcessing: false,
       isProcessingTTS: false,
-      userLanguage: 'vi', // Ngôn ngữ mặc định
-  // Tự động phát TTS
+      userLanguage: 'vi',
       recordingDuration: 5,
       useWhisper: true,
       recordingTime: 0,
@@ -257,168 +244,123 @@ export default {
       mediaRecorder: null,
       audioChunks: [],
       messages: [
-        { type: 'ai', text: 'Xin chào! Tôi là trợ lý AI. Nhấn Start để bắt đầu phiên học tập.' },
-        { type: 'ai', text: 'Tôi sẽ giúp bạn luyện tập kỹ năng nói và trả lời các câu hỏi.' }
+        { type: 'ai', text: this.$t('welcomeMsg') },
+        { type: 'ai', text: this.$t('helpMsg') }
       ],
       textInput: '',
-      inputMode: 'text', // 'text' or 'voice'
+      inputMode: 'text',
       selectedTopic: '',
       selectedLevel: '',
     }
   },
   mounted() {
-    // this.DataHocVien()
     this.DataCapDo();
     this.DataNgonNgu();
-    this.DataHoSo(); // Lấy danh sách hồ sơ học tập
+    this.DataHoSo();
   },
   methods: {
     DataCapDo() {
-        axios
-            .get('http://127.0.0.1:8000/cap-do/data')
-            .then((res) => {
-                console.log('Cap do data response:', res.data);
-                this.capdo = res.data.data || []
-            })
-            .catch((error) => {
-                console.error('Error fetching cap do data:', error);
-                this.capdo = []
-            })
+      axios
+        .get('http://127.0.0.1:8000/cap-do/data')
+        .then((res) => {
+          this.capdo = res.data.data || []
+        })
+        .catch(() => {
+          this.capdo = []
+        })
     },
     DataNgonNgu() {
-        axios
-            .get('http://127.0.0.1:8000/chu-de/data')
-            .then((res) => {
-                console.log('Chu de data response:', res.data);
-                this.chude = res.data.data || []
-            })
-            .catch((error) => {
-                console.error('Error fetching Chu de data:', error);
-                this.chude = []
-            })
+      axios
+        .get('http://127.0.0.1:8000/chu-de/data')
+        .then((res) => {
+          this.chude = res.data.data || []
+        })
+        .catch(() => {
+          this.chude = []
+        })
     },
     DataHoSo() {
-        const token = localStorage.getItem("chia_khoa");
-        if (!token) {
-            console.log('No token found, cannot fetch hoso data');
-            return;
-        }
-        
-        axios
-            .get('http://127.0.0.1:8000/ho-so-hoc-tap/data', {
-                headers: {
-                    Authorization: "Token " + token,
-                },
-            })
-            .then((res) => {
-                console.log('Ho so data response:', res.data);
-                this.hosoList = res.data.data || [];
-                
-                // Đọc ID hồ sơ được chọn từ localStorage
-                const selectedHosoIdFromStorage = localStorage.getItem('selectedHosoId');
-                
-                if (this.hosoList.length > 0) {
-                    if (selectedHosoIdFromStorage) {
-                        // Kiểm tra xem ID từ localStorage có tồn tại trong danh sách không
-                        const hosoExists = this.hosoList.find(hoso => hoso.id == selectedHosoIdFromStorage);
-                        if (hosoExists) {
-                            this.selectedHosoId = parseInt(selectedHosoIdFromStorage);
-                        } else {
-                            // Nếu không tồn tại, chọn hồ sơ đầu tiên
-                            this.selectedHosoId = this.hosoList[0].id;
-                        }
-                    } else {
-                        // Nếu không có ID trong localStorage, chọn hồ sơ đầu tiên
-                        this.selectedHosoId = this.hosoList[0].id;
-                    }
-                    this.getUserLanguage(); // Lấy ngôn ngữ sau khi có hồ sơ
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching ho so data:', error);
-                this.hosoList = [];
-            })
+      const token = localStorage.getItem("chia_khoa");
+      if (!token) return;
+      axios
+        .get('http://127.0.0.1:8000/ho-so-hoc-tap/data', {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        })
+        .then((res) => {
+          this.hosoList = res.data.data || [];
+          const selectedHosoIdFromStorage = localStorage.getItem('selectedHosoId');
+          if (this.hosoList.length > 0) {
+            if (selectedHosoIdFromStorage) {
+              const hosoExists = this.hosoList.find(hoso => hoso.id == selectedHosoIdFromStorage);
+              this.selectedHosoId = hosoExists ? parseInt(selectedHosoIdFromStorage) : this.hosoList[0].id;
+            } else {
+              this.selectedHosoId = this.hosoList[0].id;
+            }
+            this.getUserLanguage();
+          }
+        })
+        .catch(() => {
+          this.hosoList = [];
+        })
     },
-    getUserLanguage() {
-        const token = localStorage.getItem("chia_khoa");
-        if (!token) {
-            console.log('No token found, using default language');
-            return;
-        }
-        
-        if (!this.selectedHosoId) {
-            console.log('No hoso selected, using default language');
-            this.userLanguage = 'vi';
-            return;
-        }
-        
-        console.log('Fetching user language for hoso ID:', this.selectedHosoId);
-        axios
-            .get(`http://127.0.0.1:8000/ho-so-hoc-tap/language?hoso_id=${this.selectedHosoId}`, {
-                headers: {
-                    Authorization: "Token " + token,
-                },
-            })
-            .then((res) => {
-                console.log('User language response:', res.data);
-                if (res.data.success && res.data.language) {
-                    // Sử dụng mã gTTS từ database
-                    this.userLanguage = res.data.language.gtts_code || 'vi';
-                    console.log('Set user language to:', this.userLanguage);
-                    console.log('Language details:', {
-                        id: res.data.language.id,
-                        name: res.data.language.name,
-                        code: res.data.language.code,
-                        gtts_code: res.data.language.gtts_code
-                    });
-                } else {
-                    console.log('No language found in response, using default vi');
-                    this.userLanguage = 'vi';
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching user language:', error);
-                // Sử dụng ngôn ngữ mặc định nếu có lỗi
-                this.userLanguage = 'vi';
-                console.log('Using default language due to error:', this.userLanguage);
-            })
-    },
+   async getUserLanguage() {
+  const token = localStorage.getItem("chia_khoa");
+  if (!token) return;
+  if (!this.selectedHosoId) {
+    this.userLanguage = 'vi';
+    await setLocale('vi');
+    return;
+  }
+  try {
+    const res = await axios.get(
+      `http://127.0.0.1:8000/ho-so-hoc-tap/language?hoso_id=${this.selectedHosoId}`,
+      { headers: { Authorization: "Token " + token } }
+    );
+    if (res.data.success && res.data.language) {
+      this.userLanguage = res.data.language.gtts_code || 'vi';
+      await setLocale(this.userLanguage);
+    } else {
+      this.userLanguage = 'vi';
+      await setLocale('vi');
+    }
+  } catch {
+    this.userLanguage = 'vi';
+    await setLocale('vi');
+  }
+},
     onHosoChange() {
-        console.log('Hồ sơ học tập đã thay đổi:', this.selectedHosoId);
-        if (this.selectedHosoId) {
-            this.getUserLanguage(); // Lấy ngôn ngữ mới cho hồ sơ đã chọn
-        }
+      if (this.selectedHosoId) {
+        this.getUserLanguage();
+      }
     },
     startSession() {
       this.sessionStarted = true;
       this.messages = [
-        { type: 'ai', text: '🎉 Phiên học tập đã bắt đầu!' },
-        { type: 'ai', text: 'Bạn có thể nhập text hoặc sử dụng microphone để nói chuyện với tôi.' },
-        { type: 'ai', text: 'Tôi sẽ lắng nghe và trả lời các câu hỏi của bạn.' }
+        { type: 'ai', text: this.$t('sessionStarted') },
+        { type: 'ai', text: this.$t('inputTextOrMic') },
+        { type: 'ai', text: this.$t('willListenAndAnswer') }
       ];
-      // Thêm hiệu ứng chuyển động
       setTimeout(() => {
         this.messages.push({ 
           type: 'ai', 
-          text: '💡 Mẹo: Bạn có thể chuyển đổi giữa Text và Voice bằng các tab bên dưới.' 
+          text: this.$t('tipSwitchTab') 
         });
       }, 2000);
     },
-
     async toggleOnmic() {
       if (this.inputMode !== 'voice') {
         this.inputMode = 'voice';
         return;
       }
       this.onmic = this.onmic === 1 ? 0 : 1
-
       if (this.onmic === 1) {
         await this.startRecording()
       } else {
         this.stopRecording()
       }
     },
-
     async startRecording() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -426,34 +368,26 @@ export default {
         this.audioChunks = []
         this.isRecording = true
         this.startRecordingTimer()
-
         this.mediaRecorder.ondataavailable = (e) => {
           this.audioChunks.push(e.data)
         }
-
         this.mediaRecorder.onstop = async () => {
           await this.processRecording()
         }
-
         this.mediaRecorder.start()
-        // Auto-stop after duration
         setTimeout(() => {
           if (this.isRecording) {
             this.stopRecording()
           }
         }, this.recordingDuration * 1000)
-
       } catch (error) {
-        console.error('Error accessing microphone:', error)
         this.messages.push({ 
           type: 'ai', 
-          text: '❌ Không thể truy cập microphone. Vui lòng sử dụng chế độ Text để nhập tin nhắn.' 
+          text: this.$t('micError') 
         })
         this.inputMode = 'text';
-        // this.onmic = 0
       }
     },
-
     stopRecording() {
       if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
         this.mediaRecorder.stop()
@@ -462,71 +396,18 @@ export default {
       this.isRecording = false
       this.stopRecordingTimer()
     },
-
     startRecordingTimer() {
       this.recordingTime = 0
       this.recordingTimer = setInterval(() => {
         this.recordingTime++
       }, 1000)
     },
-
     stopRecordingTimer() {
       if (this.recordingTimer) {
         clearInterval(this.recordingTimer)
         this.recordingTimer = null
       }
     },
-
-    // async processRecording() {
-    //   this.isProcessing = true
-      
-    //   try {
-    //     const blob = new Blob(this.audioChunks, { type: 'audio/wav' })
-    //     const base64Audio = await this.blobToBase64(blob)
-
-    //     // Sử dụng GPT API cho voice chat
-    //     const response = await baseRequest.post('/gpt/voice-chat/', {
-    //       audio_base64: base64Audio,
-    //       topic: this.selectedTopic,
-    //       level: this.selectedLevel,
-    //       use_whisper: this.useWhisper
-    //     })
-
-    //     if (response.data.success) {
-    //       const userText = response.data.transcription.text
-    //       this.messages.push({ type: 'user', text: userText })
-          
-    //       // Hiển thị phản hồi từ GPT
-    //       if (response.data.gpt_response.success) {
-    //         this.messages.push({ 
-    //           type: 'ai', 
-    //           text: response.data.gpt_response.response
-    //         })
-    //       } else {
-    //         this.messages.push({ 
-    //           type: 'ai', 
-    //           text: `⚠️ Lỗi GPT: ${response.data.gpt_response.error}` 
-    //         })
-    //       }
-    //     } else {
-    //       this.messages.push({ 
-    //         type: 'ai', 
-    //         text: `⚠️ Lỗi nhận diện: ${response.data.error}. Vui lòng thử lại hoặc sử dụng chế độ Text.` 
-    //       })
-    //     }
-
-    //   } catch (error) {
-    //     console.error('Error processing recording:', error)
-    //     this.messages.push({ 
-    //       type: 'ai', 
-    //       text: '❌ Có lỗi xảy ra khi xử lý audio. Vui lòng thử lại hoặc sử dụng chế độ Text.' 
-    //     })
-    //   } finally {
-    //     this.isProcessing = false
-    //     this.onmic = 0
-    //   }
-    // },
-
     blobToBase64(blob) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
@@ -538,57 +419,43 @@ export default {
         reader.readAsDataURL(blob)
       })
     },
-
     async sendTextMessage() {
       if (this.textInput.trim()) {
         const userMessage = this.textInput.trim();
         this.messages.push({ type: 'user', text: userMessage });
-        
-        // Clear input
         this.textInput = '';
-        
-        // Gửi tin nhắn lên GPT API
         this.isProcessing = true;
-        
         try {
           const response = await baseRequest.post('gpt/chat/', {
             message: userMessage,
             topic: this.selectedTopic,
             level: this.selectedLevel
           });
-
           if (response.data.success) {
             const aiMessage = { 
               type: 'ai', 
               text: response.data.response
             };
             this.messages.push(aiMessage);
-            
-            // Tự động phát TTS cho tin nhắn AI
             this.playTTS(aiMessage.text);
           } else {
             this.messages.push({ 
               type: 'ai', 
-              text: `⚠️ Lỗi GPT: ${response.data.error}` 
+              text: this.$t('gptError', { error: response.data.error }) 
             });
           }
         } catch (error) {
-          console.error('Error sending message to GPT:', error);
           this.messages.push({ 
             type: 'ai', 
-            text: '❌ Có lỗi xảy ra khi kết nối với GPT. Vui lòng thử lại.' 
+            text: this.$t('gptConnectError') 
           });
         } finally {
           this.isProcessing = false;
         }
       }
     },
-
     async playTTS(text) {
       if (!text || this.isProcessingTTS) return;
-      
-      console.log('TTS Request - Text:', text, 'Language:', this.userLanguage);
-      console.log('TTS Request Body:', { text, lang: this.userLanguage });
       this.isProcessingTTS = true;
       try {
         const response = await fetch('http://127.0.0.1:8000/tts/gtts/', {
@@ -599,104 +466,81 @@ export default {
           },
           body: JSON.stringify({ 
             text,
-            lang: this.userLanguage // Gửi ngôn ngữ từ database
+            lang: this.userLanguage
           })
         });
-        
         if (response.ok) {
           const blob = await response.blob();
           const url = URL.createObjectURL(blob);
           const audio = new Audio(url);
-          
           audio.onended = () => {
-            URL.revokeObjectURL(url); // Giải phóng bộ nhớ
+            URL.revokeObjectURL(url);
           };
-          
           await audio.play();
         } else {
-          const errorData = await response.json();
-          console.error('TTS Error:', errorData);
-          alert('Không thể chuyển văn bản thành giọng nói!');
+          alert(this.$t('ttsError'));
         }
       } catch (error) {
-        console.error('TTS Error:', error);
-        alert('Lỗi khi phát âm thanh!');
+        alert(this.$t('ttsPlayError'));
       } finally {
         this.isProcessingTTS = false;
       }
     },
-
     toggleStop() {
       this.stop = this.stop === 1 ? 0 : 1
     },
-    
     togglevolum() {
       this.volum = this.volum === 1 ? 0 : 1
     },
-    
     toggleSidebar() {
       this.sidebarCollapsed = !this.sidebarCollapsed;
     },
-
-
     async getLearningSuggestions() {
-      // Kiểm tra xem đã chọn chủ đề và cấp độ chưa
       if (!this.form.chu_de || !this.form.trinh_do) {
         this.messages.push({ 
           type: 'ai', 
-          text: '⚠️ Vui lòng chọn cả chủ đề và cấp độ trước khi lấy gợi ý học tập.' 
+          text: this.$t('chooseTopicAndLevel') 
         });
         return;
       }
-
       this.isProcessing = true;
-      
-      // Lấy tên chủ đề và cấp độ từ dữ liệu
       const selectedChuDe = this.chude.find(item => item.id === this.form.chu_de);
       const selectedCapDo = this.capdo.find(item => item.id === this.form.trinh_do);
-      
       const chuDeName = selectedChuDe ? selectedChuDe.ten_chu_de : '';
       const capDoName = selectedCapDo ? selectedCapDo.ten_cap_do : '';
-      
       this.messages.push({ 
         type: 'user', 
-        text: `Tôi muốn học về "${chuDeName}" ở cấp độ "${capDoName}".` 
+        text: this.$t('wantToLearn', { topic: chuDeName, level: capDoName }) 
       });
-
       try {
         const response = await baseRequest.post('gpt/chat/', {
-          message: `Hãy đưa ra gợi ý học tập cho chủ đề "${chuDeName}" ở cấp độ "${capDoName}".`,
+          message: this.$t('suggestionPrompt', { topic: chuDeName, level: capDoName }),
           topic_id: this.form.chu_de,
           level_id: this.form.trinh_do
         });
-
         if (response.data.success) {
           const aiMessage = { 
             type: 'ai', 
-            text: `💡 Gợi ý học tập cho "${chuDeName}" (${capDoName}):\n\n${response.data.response}` 
+            text: this.$t('suggestionResult', { topic: chuDeName, level: capDoName, suggestion: response.data.response }) 
           };
           this.messages.push(aiMessage);
-          
-          // Tự động phát TTS cho tin nhắn AI
           this.playTTS(aiMessage.text);
         } else {
           this.messages.push({ 
             type: 'ai', 
-            text: `⚠️ Không thể lấy gợi ý cho chủ đề "${chuDeName}" với trình độ "${capDoName}". Vui lòng thử lại.` 
+            text: this.$t('suggestionFail', { topic: chuDeName, level: capDoName }) 
           });
         }
       } catch (error) {
-        console.error('Error getting learning suggestions:', error);
         this.messages.push({ 
           type: 'ai', 
-          text: '❌ Có lỗi xảy ra khi lấy gợi ý học tập. Vui lòng thử lại.' 
+          text: this.$t('suggestionError') 
         });
       } finally {
         this.isProcessing = false;
       }
     }
   },
-
   beforeUnmount() {
     this.stopRecording()
     this.stopRecordingTimer()
