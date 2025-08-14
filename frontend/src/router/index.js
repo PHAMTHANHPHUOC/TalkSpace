@@ -37,6 +37,32 @@ const routes = [
         path: '/kich-hoat-tai-khoan/:id_can_kich_hoat', component: () => import('../components/NguoiDung/KichHoatTaiKhoan/index.vue'),
         
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     {
+        path: '/admin/quan-ly-nguoi-dung', component: () => import('../components/Admin/NguoiDung/index.vue'),
+        
+    },
 ]
 const router = createRouter({
     history: createWebHistory(),

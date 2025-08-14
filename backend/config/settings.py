@@ -103,9 +103,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'speakingai',               # Tên database trong Navicat
+        'NAME': 'talkspace',               # Tên database trong Navicat
         'USER': 'root',               # Tài khoản MySQL
-        'PASSWORD': 'Phuoc1512.',                 # Mật khẩu MySQL
+        'PASSWORD': '123456',                 # Mật khẩu MySQL
         'HOST': '127.0.0.1',          # IP của máy MySQL (localhost)
         'PORT': '3306',               # Cổng MySQL (mặc định là 3306)
     }
